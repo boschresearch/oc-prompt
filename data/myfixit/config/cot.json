@@ -1,0 +1,40 @@
+{
+  "source_path": "data/myfixit/sample_template",
+  "target_path": "data/myfixit/target/cot",
+  "env_files": [
+    "data/env/azure_openai_gpt4o.env",
+    "data/env/azure_openai_gpt4o_mini.env",
+    "data/env/azure_deepseek_r1.env",
+    "data/env/ollama_mistral.env",
+    "data/env/ollama_deepseek_r1.env"
+  ],
+  "max_files": "",
+  "reset": false,
+  "prefix_split": 2,
+  "filename_pattern": "{prefix}_{base_title}_{target_title}",
+  "prompts": [
+    {
+      "name": "adjust_instruction",
+      "template_file": "english/cot.md",
+      "input": {
+        "base_material": {
+          "source": "base_steps"
+        },
+        "base_outcome": {
+          "source": "base_title"
+        },
+        "target_outcome": {
+          "source": "target_title"
+        }
+      },
+      "output_key": "target_steps",
+      "preserve_fields": [
+        "base_title",
+        "base_steps",
+        "base_component",
+        "target_title",
+        "target_component"
+      ]
+    }
+  ]
+}

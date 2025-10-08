@@ -1,0 +1,45 @@
+{
+  "source_path": "data/recipe/translation",
+  "target_path": "data/recipe/target/cot",
+  "env_files": [
+    "data/env/azure_openai_gpt4o.env",
+    "data/env/azure_openai_gpt4o_mini.env",
+    "data/env/azure_deepseek_r1.env",
+    "data/env/ollama_mistral.env",
+    "data/env/ollama_deepseek_r1.env"
+  ],
+  "max_files": "",
+  "reset": false,
+  "prefix_split": 1,
+  "filename_pattern": "{prefix}_{english_base_dish_name}_{english_target_dish_name}",
+  "prompts": [
+    {
+      "name": "adjust_instruction",
+      "template_file": "english/cot.md",
+      "input": {
+        "base_material": {
+          "source": "english_base_recipe",
+          "flatten": true
+        },
+        "base_outcome": {
+          "compose": ["english_base_dish_name", "mandarin_base_dish_name"],
+          "format": "{} ({})"
+        },
+        "target_outcome": {
+          "compose": ["english_target_dish_name", "mandarin_target_dish_name"],
+          "format": "{} ({})"
+        }
+      },
+      "output_key": "english_target_recipe",
+      "preserve_fields": [
+        "english_base_dish_name",
+        "mandarin_base_dish_name",
+        "english_target_dish_name",
+        "mandarin_target_dish_name",
+        "english_base_recipe",
+        "english_base_ingredient",
+        "mandarin_base_ingredient"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "source_path": "data/recipe/translation",
+  "target_path": "data/recipe/target/oc",
+  "env_files": [
+    "data/env/azure_openai_gpt4o.env",
+    "data/env/azure_openai_gpt4o_mini.env",
+    "data/env/ollama_mistral.env"
+  ],
+  "max_files": "",
+  "reset": false,
+  "prefix_split": 1,
+  "filename_pattern": "{prefix}_{english_base_dish_name}_{english_target_dish_name}",
+  "prompts": [
+    {
+      "name": "expand_instruction",
+      "template_file": "english/oc.md",
+      "input": {
+        "instruction_a": {
+          "source": "english_base_recipe",
+          "flatten": true
+        },
+        "outcome_a": {
+          "compose": ["english_base_dish_name", "mandarin_base_dish_name"],
+          "format": "{} ({})"
+        },
+        "outcome_b": {
+          "compose": ["english_target_dish_name", "mandarin_target_dish_name"],
+          "format": "{} ({})"
+        }
+      },
+      "output_key": "source_recipe",
+      "file_suffix": "_1",
+      "preserve_fields": []
+    },
+    {
+      "name": "compact_instruction",
+      "template_file": "english/oc.md",
+      "input": {
+        "instruction_b": {
+          "source": "source_recipe"
+        },
+        "outcome_b": {
+          "compose": ["english_target_dish_name", "mandarin_target_dish_name"],
+          "format": "{} ({})"
+        }
+      },
+      "output_key": "compacted_recipe",
+      "file_suffix": "_2",
+      "preserve_fields": []
+    },
+    {
+      "name": "transfer_instruction",
+      "template_file": "english/oc.md",
+      "input": {
+        "instruction_a": {
+          "source": "english_base_recipe"
+        },
+        "instruction_b": {
+          "source": "compacted_recipe"
+        },
+        "outcome_b": {
+          "compose": ["english_target_dish_name", "mandarin_target_dish_name"],
+          "format": "{} ({})"
+        }
+      },
+      "output_key": "english_target_recipe",
+      "file_suffix": "",
+      "preserve_fields": [
+        "english_base_dish_name",
+        "mandarin_base_dish_name",
+        "english_base_recipe",
+        "english_target_dish_name",
+        "mandarin_target_dish_name"
+      ]
+    }
+  ]
+}

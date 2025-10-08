@@ -1,0 +1,34 @@
+{
+  "translation_data_dir": "./data/recipe/translation",
+  "target_data_dir": "./data/recipe/target",
+  "evaluation_output_dir": "./data/recipe/evaluation/critics",
+  "model_config_file": "./data/env/azure_deepseek_v3.env",
+  "execution_mode": "source",
+  "test_approach_list": ["baseline", "cot", "oc", "critics"],
+  "test_llm_list": [
+    "azure_openai_gpt4o.env",
+    "azure_openai_gpt4o_mini.env",
+    "ollama_mistral.env",
+    "ollama_deepseek_r1.env",
+    "azure_deepseek_r1.env"
+  ],
+  "evaluation_steps": [
+    "Verify that every listed ingredient is actually referenced in the instructions and that no step uses an ingredient missing from the list.",
+    "Identify any actions that are irrelevant, unsuitable, or physically impossible given the stated ingredients or cooking method and flag them as critical errors.",
+    "Check whether ingredient-specific or food-safety-critical steps (e.g., cleaning, purging, soaking, reaching safe internal temperature) are present; missing such steps constitutes a serious omission.",
+    "Evaluate the causal order of steps (preheat before bake, marinate before cook, etc.) and flag any instruction obviously out of order or breaking a required dependency.",
+    "Detect instructions that could cause harm (unsafe temperatures, cross-contamination, flammable scenarios, etc.) and penalize heavily.",
+    "Recognize that some recipes assume experienced cooks; do not penalize brevity unless the omitted detail is essential for safety or success.",
+    "Provide concise, actionable feedback on each critical issue detected and suggest specific fixes.",
+    "Return a single integer rating from 1 (poor feasibility) to 10 (excellent feasibility) reflecting overall safety, completeness, consistency, and likelihood of a successful dish."
+  ],
+  "instruction": "You will be given a cooking recipe. Your task is to evaluate and rate this recipe on one metric. Please keep these instructions open and refer to them as needed.",
+  "metric_name": "Recipe Consistency & Feasibility (1-10)",
+  "json_fields": {
+    "source": { "recipe_text": "english_base_recipe", "recipe_name": "english_base_dish_name" },
+    "target": { "recipe_text": "english_target_recipe", "recipe_name": "english_target_dish" }
+  },
+  "output_fields": { "id": "recipe_id", "name": "recipe_name" },
+  "combine_template": "recipe_name: {name}, recipe instruction: {text}",
+  "max_recipes": -1
+}

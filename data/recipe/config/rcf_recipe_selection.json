@@ -1,0 +1,5 @@
+{
+  "recipe_ids": [51, 101, 151, 202, 251, 301, 352, 401, 451, 501],
+  "prompting_techniques": ["baseline", "cot", "critics", "oc"],
+  "llm_names": ["azure_openai_gpt4o_mini.env"]
+}

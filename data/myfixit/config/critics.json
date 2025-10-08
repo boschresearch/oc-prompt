@@ -1,0 +1,75 @@
+{
+  "source_path": "data/myfixit/sample_template",
+  "target_path": "data/myfixit/target/critics",
+  "env_files": [
+    "data/env/azure_openai_gpt4o.env",
+    "data/env/azure_openai_gpt4o_mini.env",
+    "data/env/ollama_mistral.env"
+  ],
+  "max_files": "",
+  "reset": false,
+  "prefix_split": 2,
+  "filename_pattern": "{prefix}_{base_title}_{target_title}",
+  "prompts": [
+    {
+      "name": "adjust_instruction",
+      "template_file": "english/critics.md",
+      "input": {
+        "instruction_a": {
+          "source": "base_steps"
+        },
+        "outcome_a": {
+          "source": "base_title"
+        },
+        "outcome_b": {
+          "source": "target_title"
+        }
+      },
+      "output_key": "target_instruction",
+      "file_suffix": "_1",
+      "preserve_fields": []
+    },
+    {
+      "name": "review_instruction",
+      "template_file": "english/critics.md",
+      "input": {
+        "instruction": {
+          "source": "target_instruction"
+        },
+        "outcome": {
+          "source": "target_title"
+        }
+      },
+      "output_key": "feedback",
+      "file_suffix": "_2",
+      "preserve_fields": []
+    },
+    {
+      "name": "revise_instruction_on_feedback",
+      "template_file": "english/critics.md",
+      "input": {
+        "feedback": {
+          "source": "feedback"
+        },
+        "outcome_b": {
+          "source": "target_title"
+        },
+        "instruction_a": {
+          "source": "base_steps"
+        },
+        "instruction_b": {
+          "source": "target_instruction"
+        }
+      },
+      "output_key": "target_steps",
+      "file_suffix": "",
+      "preserve_fields": [
+        "base_title",
+        "base_steps",
+        "base_component",
+        "target_title",
+        "target_component"
+      ]
+    }
+  ]
+}

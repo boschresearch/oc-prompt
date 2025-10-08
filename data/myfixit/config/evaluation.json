@@ -1,0 +1,43 @@
+{
+  "translation_data_dir": "./data/myfixit/sample_template",
+  "target_data_dir": "./data/myfixit/target",
+  "evaluation_output_dir": "./data/myfixit/evaluation/critics",
+  "model_config_file": "./data/env/azure_openai_gpt4o.env",
+  "execution_mode": "source",
+  "test_approach_list": ["baseline", "cot", "oc", "critics"],
+  "test_llm_list": [
+    "azure_openai_gpt4o.env",
+    "azure_openai_gpt4o_mini.env",
+    "ollama_mistral.env",
+    "ollama_deepseek_r1.env",
+    "azure_deepseek_r1.env"
+  ],
+  "evaluation_steps": [
+    "Verify that every listed resource (parts, tools, materials) is referenced in the steps, and that no step requires an unlisted resource.",
+    "Identify any actions that are physically impossible, irrelevant, or clearly unsuitable for the stated goal or context; flag as critical errors.",
+    "Check whether domain-specific safety or preparation steps (e.g., de-energising equipment, wearing PPE, creating backups) are present; missing any constitutes a serious omission.",
+    "Evaluate the causal order of steps (disconnect power before disassembly, initialise system before calibration, etc.) and flag any instruction that violates dependencies.",
+    "Detect directives that could cause injury, property damage, data loss, or environmental harm and penalise heavily.",
+    "Do not penalise brevity intended for experienced users unless essential safety or success information is missing.",
+    "Provide concise, actionable feedback on each critical issue detected and suggest specific fixes.",
+    "Return a single integer rating from 1 (poor feasibility) to 10 (excellent feasibility) reflecting overall safety, completeness, consistency, and likelihood of success."
+  ],
+  "instruction": "You will be given a fixing manual. Your task is to evaluate and rate the steps of this manual on one metric. Please keep these instructions open and refer to them as needed.",
+  "metric_name": "Procedural Instruction Consistency & Feasibility (1-10)",
+  "json_fields": {
+    "source": {
+      "recipe_text": "base_steps",
+      "recipe_name": "base_title"
+    },
+    "target": {
+      "recipe_text": "target_steps",
+      "recipe_name": "target_title"
+    }
+  },
+  "output_fields": {
+    "id": "instruction_id",
+    "name": "instruction_name"
+  },
+  "combine_template": "fixing manual name: {name}, instruction: {text}",
+  "max_recipes": -1
+}
