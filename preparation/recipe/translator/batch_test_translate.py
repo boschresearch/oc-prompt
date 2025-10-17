@@ -37,11 +37,11 @@ def clear_directory(directory):
 
 def main(k=None):
     # Step 1: Clear the directory
-    directory = '../data/translation'
+    directory = 'data/recipe/translation'
     clear_directory(directory)
 
     # Step 2: Read lines from the source file
-    with open("../data/source/base_recipes.txt", "r") as f:
+    with open("data/recipe/source/base_recipes.txt", "r") as f:
         lines = f.readlines()
 
     translator = TestRecipeTranslator('azure_openai_gpt4o.env')

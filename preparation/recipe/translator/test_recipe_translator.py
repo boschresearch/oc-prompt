@@ -34,19 +34,19 @@ class TestRecipeTranslator:
         self.template = self.load_templates()
 
     def initialize_llm_model(self, env_filename):
-        file_path = os.path.join("../../../data", "env", env_filename)
+        file_path = os.path.join("data", "env", env_filename)
         load_dotenv(file_path)
         os.environ["AZURE_OPENAI_API_KEY"] = os.getenv("AZURE_OPENAI_API_KEY")
         return AzureChatOpenAI(
             azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
             azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-            openai_api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+            api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
             temperature=0
         )
 
     def load_templates(self):
         templates = {}
-        with open("../../../prompt/translate.md", "r") as file:
+        with open("prompt/translate.md", "r") as file:
             content = file.read()
             sections = content.split("## ")
             for section in sections[1:]:
@@ -58,7 +58,7 @@ class TestRecipeTranslator:
 
     def translate_recipe(self, counter, base_dish, base_recipe, target_dish):
         file_name = f"{counter}_{base_dish}_{target_dish}.json"
-        directory_path = os.path.join("../../../data", "translation")
+        directory_path = os.path.join("data", "recipe", "translation")
         os.makedirs(directory_path, exist_ok=True)
         file_path = os.path.join(directory_path, file_name)
 
