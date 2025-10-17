@@ -4,7 +4,7 @@ This repository hosts the official companion code for the paper **“Over-Genera
 ## Supplementary Materials
 Two additional PDF documents are provided under `docs` for reference:
 - [Official poster](docs/EMNLP%202025_Find-3360_Poster.pdf) presented at EMNLP 2025  
-- [Corresponding presentation slides](docs/EMNLP%202025_Find-3360_Presentation.pdf) submitted to Underline for EMNLP 2025  
+- [Slide deck](docs/EMNLP%202025_Find-3360_Presentation.pdf) submitted to Underline for EMNLP 2025  
 
 ## Requirements and Usage
 ### 1. Dependencies
@@ -28,8 +28,7 @@ Below is a comprehensive breakdown of the repository’s layout and purpose of e
       - `evaluation_20250519_135244 (recipe_source_gpt4o)`: G-Eval run on *original* recipes (pre-conversion) using the same evaluation model.  
   - **`recipe/`** – Contains dataset-specific configurations and processed recipe data.  
     - `config/`: JSON configuration files for benchmarking and model orchestration.  
-    - `source/`: Unprocessed raw data directory. Original Xiachufang data is **not distributed** due to potential licensing issues, but can be downloaded from [Xiachufang Counterfactual Recipe Generation](https://github.com/xxxiaol/counterfactual-recipe-generation/tree/main/data) and placed here.  
-      Typical directory contents should look as follows:
+    - `source/`: Unprocessed raw data directory. Original Xiachufang data is **not distributed** due to potential licensing issues, but can be downloaded from [Xiachufang Counterfactual Recipe Generation](https://github.com/xxxiaol/counterfactual-recipe-generation/tree/main/data) and placed here. Typical directory contents should look as follows:
       ```bash
       (oc-prompt-study-py3.12) user@host:~/oc_prompt_study/data/recipe/source$ ls
       base_recipes.txt  base_recipe.tsv  changing_ingres.txt  dish_pairs.txt  glossary_dict.pkl  parsing_data.pkl  pivot_actions.pkl
@@ -40,8 +39,7 @@ Below is a comprehensive breakdown of the repository’s layout and purpose of e
     - `RCF/`: Files related to RCF metric scoring.  
   - **`myfixit/`** – Similar structure as `recipe/`, but for **MyFixit** procedural repair instructions.  
     - `config/`: Benchmarking and prompt configuration files.  
-    - `source/`: Original MyFixit dataset directory (excluded for licensing reasons). The dataset can be downloaded from [MyFixit Dataset Repository](https://github.com/rub-ksv/MyFixit-Dataset/tree/master/jsons).  
-      The typical structure is as follows:
+    - `source/`: Original MyFixit dataset directory (excluded for licensing reasons). The dataset can be downloaded from [MyFixit Dataset Repository](https://github.com/rub-ksv/MyFixit-Dataset/tree/master/jsons). The typical structure is as follows:
       ```bash
       (oc-prompt-study-py3.12) user@host:~/oc_prompt_study/data/myfixit/source$ ls
       Apparel.json     Camera.json          'Computer Hardware.json'  'Game Console.json'   Mac.json             PC.json      Skills.json   Vehicle.json
@@ -59,7 +57,7 @@ Before running any conversion or evaluation, the system must be configured to ac
 
 #### **(1) Azure OpenAI (e.g., GPT-4o)**
 ```bash
-AZURE_OPENAI_API_KEY=    # 32-character API key
+AZURE_OPENAI_API_KEY= # 32-character API key
 AZURE_OPENAI_ENDPOINT=https://<your-endpoint-name>.openai.azure.com/
 AZURE_OPENAI_DEPLOYMENT=gpt-4o
 AZURE_OPENAI_API_VERSION=2025-03-01-preview
@@ -67,7 +65,7 @@ AZURE_OPENAI_API_VERSION=2025-03-01-preview
 
 #### **(2) Azure Inference Endpoint (e.g., DeepSeek-R1)**
 ```bash
-AZURE_INFERENCE_CREDENTIAL=   # 104-character credential token
+AZURE_INFERENCE_CREDENTIAL= # 104-character credential token
 AZURE_INFERENCE_ENDPOINT=https://<your-deepseek-endpoint>.inference.ai.azure.com/
 MODEL_NAME=DeepSeek-R1
 API_VERSION=2024-05-01-preview
@@ -80,7 +78,7 @@ OLLAMA_TEMPERATURE=0
 OLLAMA_BASE_URL=https://<your-ollama-endpoint>
 ```
 
-These `.env` files define how each model environment will be loaded by the experiment driver. Multiple environments can be listed together to enable comparative experiments using different models (e.g., Azure GPT-4o, Azure DeepSeek-R1, and local Ollama Mistral).
+These `.env` files define how each model environment will be loaded by the experiment and evaluation driver. 
 
 ### 4. Configuration File Explanation
 Each experiment configuration file (e.g., `baseline.json`) defines a structured set of parameters specifying how data conversion runs. For instance, `data/recipe/config/baseline.json`:
@@ -119,12 +117,12 @@ Each experiment configuration file (e.g., `baseline.json`) defines a structured 
 **Explanation:**  
 - `source_path`: Input directory containing preprocessed or translated data.  
 - `target_path`: Directory where converted (output) data will be written.  
-- `env_files`: A list of `.env` configurations defining model environments to be used during conversion (e.g., Azure OpenAI, Ollama, DeepSeek). Each model listed here will attempt conversion on the same recipe set.  
+- `env_files`: A list of `.env` configurations defining model environments to be used during conversion (e.g., Azure OpenAI, Ollama, DeepSeek). Each model listed here will attempt conversion on the same recipe/instruction set.  
 - `max_files`: Maximum number of input files to process (empty means all).  
 - `reset`: If `true`, clears any existing outputs before execution.  
 - `filename_pattern`: Naming format for generated output files.  
 - `prompts`: Describes which prompt template to use, its input fields, how parameters are composed or formatted, and which fields to preserve in the resulting JSON.  
-Most other configuration files in this project share this overall structure, differing primarily in the prompt templates or strategy (e.g., baseline, OC, hybrid).
+Most other configuration files in this project share this overall structure, differing primarily in the prompt templates or strategy (e.g., baseline, OC, CoT and so on).
 
 ### 5. Execution Guide
 #### 5.1 Prepare Datasets
@@ -171,4 +169,4 @@ Official EMNLP 2025 citation details will be added when the paper’s DOI and pr
 For any inquiries or technical questions related to the paper or codebase, please create an issue in the issue tracker (preferred for transparency and reproducibility). When reaching out by email, include a reference to the corresponding GitHub issue in your message. You may contact [Hyeongsik Kim](mailto:Hyeongsik.Kim@us.bosch.com). Please note that responses may only be provided **when time and availability permit**.
 
 ## Acknowledgment
-We express our sincere gratitude to the **CR/RHI2-NA** and **CR/RIX1-AP** teams for their invaluable technical support, insightful feedback on the paper, and assistance in setting up and maintaining the Ollama cluster used throughout this research. We extend special thanks to the managers and leaderships who permitted and supported the continuation of this research in parallel with internal activities, fostering an environment where such exploratory studies could thrive. We are also deeply grateful to the Open Source Software officers and staffs for their meticulous guidance and assistance during the open-sourcing and compliance process, ensuring this research code could be safely and responsibly shared with the community.
+We express our sincere gratitude to the **CR/RHI2-NA** and **CR/RIX1-AP** teams for their invaluable technical support, insightful feedback on the paper, and assistance in setting up and maintaining the Ollama cluster used throughout this research. We extend special thanks to the managers and leaderships who permitted and supported the continuation of this research in parallel with internal activities, fostering an environment where such exploratory studies could thrive. We are also deeply grateful to the open source software officers and staffs for their meticulous guidance and assistance during the open-sourcing and compliance process, ensuring this research code could be safely and responsibly shared with the community.
